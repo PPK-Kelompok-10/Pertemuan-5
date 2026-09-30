@@ -2,7 +2,7 @@
 // Jika versi Next.js Anda < 16: ganti nama file menjadi `middleware.ts` dan nama fungsi menjadi `middleware`.
 import { NextResponse, type NextRequest } from "next/server";
 
-const PROTECTED = ["/dashboard", "/transactions", "/settings"];
+const PROTECTED = ["/dashboard", "/transactions", "/settings", "/budgets"];
 
 /**
  * Lapis pertama (optimistis, cepat): tolak guest yang bahkan tidak punya cookie session.
@@ -23,5 +23,5 @@ export function proxy(req: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/dashboard/:path*", "/transactions/:path*", "/settings/:path*"],
+  matcher: ["/dashboard/:path*", "/transactions/:path*", "/settings/:path*", "/budgets/:path*"],
 };
