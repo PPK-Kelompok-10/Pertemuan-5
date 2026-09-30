@@ -1,0 +1,52 @@
+@import "tailwindcss";
+
+:root {
+  --page: #f2f5f7;
+  --surface: #ffffff;
+  --ink: #15202b;
+  --muted: #5a6876;
+  --line: #dbe2e8;
+  --brand: #1f3a5f;
+  --brand-ink: #ffffff;
+  --income: #0b7a4b;
+  --expense: #b3382c;
+}
+
+.dark {
+  color-scheme: dark;
+  --page: #0e1318;
+  --surface: #161d24;
+  --ink: #e7edf2;
+  --muted: #94a2af;
+  --line: #27313b;
+  --brand: #8ab8e8;
+  --brand-ink: #0e1318;
+  --income: #4cc38a;
+  --expense: #f0806f;
+}
+
+@theme inline {
+  --color-page: var(--page);
+  --color-surface: var(--surface);
+  --color-ink: var(--ink);
+  --color-muted: var(--muted);
+  --color-line: var(--line);
+  --color-brand: var(--brand);
+  --color-brand-ink: var(--brand-ink);
+  --color-income: var(--income);
+  --color-expense: var(--expense);
+  --font-sans: var(--font-jakarta), ui-sans-serif, system-ui, sans-serif;
+}
+
+body {
+  background: var(--page);
+  color: var(--ink);
+  font-family: var(--font-sans);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    transition: none !important;
+    animation: none !important;
+  }
+}
