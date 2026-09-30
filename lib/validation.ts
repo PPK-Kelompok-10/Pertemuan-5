@@ -31,6 +31,24 @@ const isRealDate = (v: string) => {
   return !Number.isNaN(d.getTime()) && d.toISOString().slice(0, 10) === v;
 };
 
+// FR-BUD-01/03: kategori + bulan (YYYY-MM), nominal > 0. `period` divalidasi format
+// saja di sini — keberadaan bulan valid (mis. bukan "2026-13") tidak dicek karena
+// period hanya dipakai sebagai kunci pengelompokan, bukan tanggal kalender asli.
+export const budgetSchema = z.object({
+  category: z.string().trim().min(1, "Kategori wajib diisi").max(40, "Kategori maksimal 40 karakter"),
+  amount: z.coerce
+    .number()
+    .int("Jumlah harus bilangan bulat (rupiah)")
+    .positive("Jumlah harus lebih dari 0")
+    .max(999_999_999_999, "Jumlah terlalu besar"),
+  period: z.string().regex(/^\d{4}-(0[1-9]|1[0-2])$/, "Bulan tidak valid"),
+});
+
+// UC-BUD-05: kategori dan bulan tidak boleh diubah saat edit, hanya nominal.
+export const budgetUpdateSchema = z.object({
+  amount: budgetSchema.shape.amount,
+});
+
 export const transactionSchema = z.object({
   type: z.enum(["income", "expense"]),
   amount: z.coerce

@@ -5,6 +5,7 @@
  */
 import bcrypt from "bcryptjs";
 import { prisma } from "@/lib/prisma"; // singleton yang sama dengan aplikasi
+import { currentPeriodWIB } from "@/lib/format";
 
 const DEMO = {
   nama: "Pengguna Demo",
@@ -39,6 +40,21 @@ async function main() {
       ],
     });
   }
+
+  // Budget demo untuk bulan berjalan, mencakup ketiga status (aman/waspada/overspending)
+  // relatif terhadap transaksi expense di atas: Kos 850rb, Makan 32rb, Transport 120rb.
+  const period = currentPeriodWIB();
+  const budgetCount = await prisma.budget.count({ where: { userId: user.id, period } });
+  if (budgetCount === 0) {
+    await prisma.budget.createMany({
+      data: [
+        { userId: user.id, category: "Kos", amount: 800000, period }, // 850rb terpakai -> overspending
+        { userId: user.id, category: "Makan", amount: 40000, period }, // 32rb terpakai -> waspada
+        { userId: user.id, category: "Transport", amount: 500000, period }, // 120rb terpakai -> aman
+      ],
+    });
+  }
+
   console.log(`Seed selesai. Login: ${DEMO.email} / ${DEMO.password}`);
 }
 
